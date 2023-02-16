@@ -1,5 +1,7 @@
 const express  = require("express") //création  d'une constante qui va contenir le module express
 const {Sequelize, DataTypes} = require("sequelize"); //importation de sequelize
+const bcrypt = require("bcrypt");   //importer le package bcrypt
+
 
 //paramètres de connexion à la base de données
 const databaseName = "apprendre";
@@ -14,14 +16,27 @@ const sequelize = new Sequelize(databaseName,username,password,{
 }); //instanciation de sequelize
 
 sequelize.define("user",{
-    name : DataTypes.STRING,
+    username : DataTypes.STRING,
     lastname : DataTypes.STRING,
     age : DataTypes.INTEGER,
-    passqord : DataTypes.STRING,
+    password : DataTypes.STRING,
     email: DataTypes.STRING
 }); //création d'un modèle (table) user
 
+const User = sequelize.models.user; //récupération du modèle user
+
+/*différentes méthodes pour récupérer des données de la base de données :
+    nom_du_modèle.findAll() : récupère tous les enregistrements
+    nom_du_modèle.findByPk() : récupère un enregistrement par son id
+    nom_du_modèle.findOne() : récupère un enregistrement par une condition
+    nom_du_modèle.findAndCountAll() : récupère tous les enregistrements et le nombre d'enregistrements
+    nom_du_modèle.findCreateFind() : récupère un enregistrement ou le crée si il n'existe pas
+    nom_du_modèle.findOrBuild() : récupère un enregistrement ou le construit si il n'existe pas
+    nom_du_modèle.create() : crée un enregistrement
+*/
+
 sequelize.sync(); //synchronisation avec la base de données.
+//Si erreur dans la table  ecrire : sequelize.sync({force:true})
 
 const app = express() //instanciation de l'application express
 const port = 4000;
@@ -41,11 +56,20 @@ app.use(express.json()) //pour pouvoir lire les données envoyées par le client
 //     });
 // });
 
-app.post("/user",(req,res)=>{
+app.post("/user",async(req,res)=>{
     
     const user =  req.body;
     //req.originalUrl //url de la requete
     //requete sql pour ajouter un user. Tjrs préciser le statut
+
+    await User.create({
+        username :req.body.username,
+        lastname : req.body.lastname,
+        age : req.body.age,
+        //hashage du mot de passe
+        password : bcrypt.hashSync(req.body.password,10),
+        email : req.body.email
+    });
     res.json(user);
 })
 
@@ -55,3 +79,12 @@ app.listen(port,function()//callback function
     console.log("Serveur start at localhost:" , port)
 })
 
+//hashage du mot de passe
+
+
+    //créer une constante qui va contenir le mot de passe
+// const pass = "123456";
+//     //hasher le mot de passe
+// const hashPassword = bcrypt.hashSync(pass,10); //plus le chiffre est grand plus le hashage est long et sécurisé
+
+// console.log(hashPassword);

@@ -31,4 +31,17 @@ utilisation de sequilize:
 récupérer sequeelize const {Sequelize} = require("sequelize");
 
 NB: installer nodemon pour ne pas avoir à relancer le serveur à chaque fois
+
+body: corps de la requete
+
+pour hasher le mot de passe: npm install bcrypt
+
+les étapes :
+
+1- installer express et ajouetre route en post /user
+2- installer sequelize et mariadb
+3- créer le model user
+4- synchroniser le tout
+5- créer un user dans la base de données
+
 */
