@@ -1,0 +1,34 @@
+// node.js vd noeud
+
+// npm init pour intialiser
+
+// npm install pour installer
+
+// pour lancer le serveur : 
+
+// const express  = require("express")
+
+// const app = express()
+// const port = 4000;
+
+// app.listen(port,function(){
+//     console.log("Serveur start at localhost:" , port)
+// })
+
+// fonction callback est une fonction qu'on donne en paramètre à
+// une autre fonction (exeple la function dans app.listen)
+/*
+la methode listen a 2 paramètres: le port et la function callback
+
+
+
+SEQUILIZE permet de gérer les bases de données (ORM)
+C'est le Doctrine de node.js
+un pachage de node.js. Donc npm install sequelize
+installation mariadb - npm install mariadb (connecteur entre sequelize et mariadb)
+
+utilisation de sequilize:
+récupérer sequeelize const {Sequelize} = require("sequelize");
+
+NB: installer nodemon pour ne pas avoir à relancer le serveur à chaque fois
+*/
