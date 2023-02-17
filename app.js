@@ -63,15 +63,48 @@ app.post("/user",async(req,res)=>{
     //requete sql pour ajouter un user. Tjrs préciser le statut
 
     await User.create({
-        username :req.body.username,
+        username :req.body.name,
         lastname : req.body.lastname,
         age : req.body.age,
         //hashage du mot de passe
         password : bcrypt.hashSync(req.body.password,10),
         email : req.body.email
     });
-    res.json(user);
+    // res.json(user);
+    res.status(200).json({message:"Utilisateur crée"});
 })
+
+app.get("/login",async(req,res)=>{
+    const User = sequelize.models.user;
+    const token = null; //token d'authentification
+
+    // - récupérer mot de passe envoyé par le client
+    // - comparer le mot de passe envoyé par le client avec le mot de passe hashé dans la base de données
+    // - si le mot de passe est correct, on génère un token d'authentification
+
+    const password = req.body.password;// 1- récupérer le mot de passe envoyé par le client
+
+    // 2-récupérer le user dans la base de données
+
+    const user = await User.findOne({
+
+        where : {username: req.body.name}
+    });
+
+    // 3-comparer le mot de passe envoyé par le client avec le mot de passe hashé dans la base de données
+
+    const isPasswordCorrect = bcrypt.compareSync(password,user.password); //password = celui du formulaire, user.password = celui de la base de données
+    
+    if(isPasswordCorrect){
+        res.status(200).json({message: "Vous êtes connecté",data:token})
+        return;
+
+    }else{
+        res.status(400).json({message: "Données incorrect",data:null})
+    }
+
+})
+
 
 
 app.listen(port,function()//callback function

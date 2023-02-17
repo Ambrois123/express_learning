@@ -44,4 +44,35 @@ les étapes :
 4- synchroniser le tout
 5- créer un user dans la base de données
 
+
+token d'authentification preuve que l'utilisateur est bien connecté
+céer route /login :
+app.get("/login",async(req,res)=>{
+    const User = sequelize.models.user;
+    const token = null; //token d'authentification
+    - récupérer mot de passe envoyé par le client
+    - comparer le mot de passe envoyé par le client avec le mot de passe hashé dans la base de données
+    - si le mot de passe est correct, on génère un token d'authentification
+
+    1- récupérer le mot de passe envoyé par le client
+
+    const password = req.body.password;
+
+    2-récupérer le user dans la base de données
+
+    const user = await User.findOne({where : {username: req.body.username}});
+
+    3- compaaer le mot de passe envoyé par le client avec le mot de passe hashé dans la base de données
+
+    if(password ok){
+        res.status(200).json({message: "Vous êtes connecté",data:token})
+        return
+    }else{
+        res.status(400).json({message: "Mot de passe incorrect",data:null})
+    }
+
+})
+
+NB: attribut(properties) une varaible d'un objet.
+
 */
